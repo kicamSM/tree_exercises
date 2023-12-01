@@ -66,7 +66,6 @@ class Tree {
         toCountStack.push(child);
       }
     }
-    
     return count;
   }
 }
