@@ -270,9 +270,44 @@ maxSum() {
   /** nextLarger(lowerBound): return the smallest value in the tree
    * which is larger than lowerBound. Return null if no such value exists. */
 
-  nextLarger(lowerBound) {
+  // return the that is the smallest value but still greater than lowerBound
+  // go through the values of the tree --> use stack or queue 
+  // test to see if 1 val is greater than < lowerBound and 2 value is less than last value 
 
+  nextLarger(lowerBound) {
+    let stack = [this.root];
+    let retVal; 
+
+    function addToStack(node) {
+      if(!node) return 
+      stack.push(node)
+      addToStack(node.left);
+      addToStack(node.right)
+
+      while(stack.length) {
+        let currNode = stack.pop();
+        if(!retVal) {
+          if(currNode.val > lowerBound) {
+            retVal = currNode.val;
+          }
+        } else {
+          if(currNode.val > lowerBound && currNode.val < retVal) {
+          retVal = currNode.val; 
+          }
+        }
+        continue; 
+      }
+    }
+    addToStack(this.root)
+    return retVal || null; 
   }
+
+  // function pushPreOrder(node, stack) {
+  //   if (!node) return;
+  //   stack.push(node.value);
+  //   pushPreOrder(node.left, stack);
+  //   pushPreOrder(node.right, stack);
+  // }
 
   /** Further study!
    * areCousins(node1, node2): determine whether two nodes are cousins
@@ -345,7 +380,16 @@ largeTree = new BinaryTree(root);
 // let result4 = tree.maxSum();
 // console.log("result4:", result4)
 
-let result5 = smallTree.maxSum();
-console.log("result5:", result5)
+// let result5 = smallTree.maxSum();
+// console.log("result5:", result5)
+
+let result6 = smallTree.nextLarger(4); 
+console.log("result6:", result6)
+
+let result7 = largeTree.nextLarger(2); 
+console.log("result7:", result7)
+
+
+
 
 module.exports = { BinaryTree, BinaryTreeNode };
