@@ -313,10 +313,95 @@ maxSum() {
    * areCousins(node1, node2): determine whether two nodes are cousins
    * (i.e. are at the same level but have different parents. ) */
 
-  areCousins(node1, node2) {
+  // we have to run a search. It probably makes more sense to do a BFS 
+  // then we have locate both items check and see if they have same parents 
+  // and are on the same level? 
 
+  // ! Did not get this to fully pass the tests. I am having issues with the levels and properly tracking them
+
+
+  areCousins(node1, node2) {
+    if(!this.root) return false; 
+    console.log("node1:", node1)
+    console.log("node2:", node2)
+    let lvlNode1 = 0; 
+    let lvlNode2 = 0; 
+    let queue = [this.root]
+    let lvlPar1;
+    let lvlPar2;
+
+    
+    while(queue.length) {
+      console.log("while loop is running")
+      let currNode = queue.shift(); 
+      // console.log("currNode:", currNode)
+      // console.log("~~lvlNode1~~:", lvlNode1)
+      // console.log("~~lvlNode2~~:", lvlNode2)
+
+      if(currNode.left){
+        // console.log("currNode.left is running")
+        // console.log("currNode.right.val:", currNode.right.val)
+        // console.log("currNode.left.val:", currNode.left.val)
+        if(currNode.left.val === node1.val) {
+          lvlNode1+=1; 
+          lvlPar1 = {"level": lvlNode1, "parent": currNode.val}; 
+          console.log("!!!!lvlPar1:", lvlPar1)
+        } 
+        if(currNode.left.val === node2.val) {
+          lvlNode2+=1; 
+          // keep track of lvlNode2
+          // console.log("lvlNode:", lvlNode)
+          lvlPar2 = {"level": lvlNode2, "parent": currNode.val}
+          console.log("!!!!lvlPar2:", lvlPar2)
+        }
+          queue.push(currNode.left) 
+      }
+      if(currNode.right) {
+        // console.log("currNode.right is running")
+        // console.log("currNode.right.val:", currNode.right.val)
+        // console.log("currNode.left.val:", currNode.left.val)
+        if(currNode.right.val === node1.val) {
+          lvlNode1++;
+          lvlPar1 = {"level": lvlNode1, "parent": currNode.val}; 
+        } 
+        if(currNode.right.val === node2.val) {
+          lvlNode2+=1;
+          lvlPar2 = {"level": lvlNode2, "parent": currNode.val};
+        }
+        queue.push(currNode.right)
+      }
+  
+      if(lvlPar1 && lvlPar2) break; 
+
+    }
+    console.log("lvlPar1:", lvlPar1)
+    console.log("lvlPar2:", lvlPar2)
+    if(lvlPar1 && lvlPar2) {
+      if(lvlPar1["level"] === lvlPar2["level"] && lvlPar1["parent"] !== lvlPar2["parent"]) {
+        return true; 
+      } 
+    }
+
+     return false; 
   }
 
+
+  
+  
+
+//  DFS [6, 4, 0, 1, 5, 2, 3]
+//  BFS [6, 4, 5, 0, 1, 2, 3, -1, -2]
+
+//                BINARY TREE 
+//                    6
+//               /        \
+//              4            5
+//          /       \      /  \
+//         0        1    2    3 
+//                /   \
+//              -1    -2
+//
+//
   /** Further study!
    * serialize(tree): serialize the BinaryTree object tree into a string. */
 
@@ -346,23 +431,23 @@ maxSum() {
 // console.log("result1:", result1)
 
 // build small tree;
-let smallLeft = new BinaryTreeNode(5);
-let smallRight = new BinaryTreeNode(5);
-let smallRoot = new BinaryTreeNode(6, smallLeft, smallRight);
-smallTree = new BinaryTree(smallRoot);
+// let smallLeft = new BinaryTreeNode(5);
+// let smallRight = new BinaryTreeNode(5);
+// let smallRoot = new BinaryTreeNode(6, smallLeft, smallRight);
+// smallTree = new BinaryTree(smallRoot);
 
 // let result2 = smallTree.maxDepth(); 
 // console.log("result2:", result2)
 
 // build large tree
-let node6 = new BinaryTreeNode(1);
-let node5 = new BinaryTreeNode(1);
-let node4 = new BinaryTreeNode(2);
-let node3 = new BinaryTreeNode(3, node4, node6);
-let node2 = new BinaryTreeNode(5, node3, node5);
-let node1 = new BinaryTreeNode(5);
-let root = new BinaryTreeNode(6, node1, node2);
-largeTree = new BinaryTree(root);
+// let node6 = new BinaryTreeNode(1);
+// let node5 = new BinaryTreeNode(1);
+// let node4 = new BinaryTreeNode(2);
+// let node3 = new BinaryTreeNode(3, node4, node6);
+// let node2 = new BinaryTreeNode(5, node3, node5);
+// let node1 = new BinaryTreeNode(5);
+// let root = new BinaryTreeNode(6, node1, node2);
+// largeTree = new BinaryTree(root);
 
 // let result3 = largeTree.maxDepth(); 
 // console.log("result3:", result3)
@@ -383,13 +468,51 @@ largeTree = new BinaryTree(root);
 // let result5 = smallTree.maxSum();
 // console.log("result5:", result5)
 
-let result6 = smallTree.nextLarger(4); 
-console.log("result6:", result6)
 
-let result7 = largeTree.nextLarger(2); 
-console.log("result7:", result7)
+// let result6 = smallTree.nextLarger(4); 
+// console.log("result6:", result6)
+
+// let result7 = largeTree.nextLarger(2); 
+// console.log("result7:", result7)
+let myNode0 = new BinaryTreeNode(0);
+let myNode1 = new BinaryTreeNode(1);
+let myNode2 = new BinaryTreeNode(2);
+let myNode3 = new BinaryTreeNode(3);
+let myNode4 = new BinaryTreeNode(4, myNode0, myNode1);
+let myNode5 = new BinaryTreeNode(5, myNode2, myNode3);
+let myRoot = new BinaryTreeNode(6, myNode4, myNode5);
+myTree = new BinaryTree(myRoot);
+
+let result8 = myTree.areCousins(myNode2, myNode1); 
+console.log("result8:", result8)
 
 
+let n7 = new BinaryTreeNode(7);
+let n6 = new BinaryTreeNode(6);
+let n5 = new BinaryTreeNode(5);
+let n4 = new BinaryTreeNode(4);
+let n3 = new BinaryTreeNode(3, n6, n7);
+let n2 = new BinaryTreeNode(2, n4, n5);
+let root = new BinaryTreeNode(1, n2, n3);
+let anotherTree = new BinaryTree(root);
 
+let result9 = anotherTree.areCousins(n4, n3); 
+console.log("result9:", result9)
+
+
+//                BINARY TREE 
+//                    1
+//               /        \
+//              2            3
+//           /     \      /   \
+//         4        5    6      7 
+
+//
+//
+
+// let test = {"a": "parent"}
+
+// console.log("test", test)
+// console.log(test["parent"])
 
 module.exports = { BinaryTree, BinaryTreeNode };
